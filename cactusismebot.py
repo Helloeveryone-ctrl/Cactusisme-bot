@@ -7,15 +7,15 @@ import os  # For environment variables
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Connect to Simple English Wikipedia
-site = mwclient.Site("simple.wikipedia.org")
+# Connect to Test Wikipedia
+site = mwclient.Site("test.wikipedia.org")
 
 USERNAME = os.getenv("WIKI_USERNAME")
 PASSWORD = os.getenv("WIKI_PASSWORD")
 
 try:
     site.login(USERNAME, PASSWORD)
-    logging.info("CactusIsMeBot logged in successfully.")
+    logging.info("CactusIsMeBot logged in successfully on Test Wikipedia.")
 except mwclient.LoginError as e:
     logging.error(f"Login failed: {e}")
     exit(1)
@@ -38,7 +38,7 @@ def remove_redlinked_templates(page):
 
         # Save the changes if the text was modified
         if cleaned_text != page_text:
-            page.edit(cleaned_text, summary="Removing red-linked templates")
+            page.edit(cleaned_text, summary="Removing red-linked templates (Test Wikipedia)")
             logging.info(f"Updated page: {page.name}")
         else:
             logging.info(f"No red-linked templates found on page: {page.name}")
@@ -47,7 +47,7 @@ def remove_redlinked_templates(page):
         logging.error(f"Error processing page {page.name}: {e}")
 
 def process_all_pages():
-    """Process all pages in Simple Wikipedia to remove red-linked templates."""
+    """Process all pages in Test Wikipedia to remove red-linked templates."""
     try:
         for page in site.allpages(namespace=0):  # Namespace 0 is for main article pages
             logging.info(f"Processing page: {page.name}")
@@ -58,4 +58,4 @@ def process_all_pages():
 # Run the bot periodically
 while True:
     process_all_pages()
-    time.sleep(3600)  # Run every hour
+    time.sleep(60)  # Run every hour
